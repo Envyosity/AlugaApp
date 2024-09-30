@@ -5,46 +5,51 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
     /**
-     * Display the registration view.
+     * Exibe o formulário de registro.
      */
-    public function create(): View
+    public function create()
     {
-        return view('auth.register');
+        return view('auth.register'); // Certifique-se de que esta view exista em resources/views/auth/
     }
 
     /**
      * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
+        // Validação dos dados do formulário de registro
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'des_nome' => 'required|string|max:255',
+            'des_email' => 'required|string|email|max:255|unique:usuario,des_email',
+            'des_cpf' => 'required|string|max:14|unique:usuario,des_cpf',
+            'des_numero_celular' => 'required|string|max:15', // Validação do número de celular
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // Criação do usuário na tabela 'usuario'
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'des_nome' => $request->des_nome,
+            'des_email' => $request->des_email,
+            'des_cpf' => $request->des_cpf,
+            'des_numero_celular' => $request->des_numero_celular, // Armazena o número de celular
             'password' => Hash::make($request->password),
         ]);
 
+        // Dispara um evento de registro do usuário
         event(new Registered($user));
 
-        Auth::login($user);
+        // Autentica o usuário recém-registrado
+        Auth::guard('web')->login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // Redireciona para a página desejada (por exemplo, o dashboard)
+        return redirect('/dashboard');
     }
 }
