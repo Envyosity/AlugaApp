@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ImoveisController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,4 +22,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
 require __DIR__.'/auth.php';
+
+
+Route::resource("/imoveis", ImoveisController::class);
+Route::get('/imoveis/search', [ImoveisController::class, 'search'])->name('imoveis.search');
+
+
+Route::get('/imoveis/create', [ImoveisController::class, 'create'])->name('imoveis.create');
+
+
+Route::resource('imoveis', ImoveisController::class);
