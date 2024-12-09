@@ -7,16 +7,13 @@
     <title>Gerenciar Imóveis</title>
 </head>
 <body>
-    <!-- Formulário para Pesquisar Imóveis -->
-    <!-- <h2>Pesquisar Imóveis</h2> -->
-    <form action="{{ route('imoveis.index') }}" method="GET">
-        <label for="query">Buscar por Nome, Cidade ou Endereço:</label><br>
-        <input type="text" id="query" name="query" placeholder="Digite sua pesquisa...">
-        <button type="submit">Pesquisar</button>
-    </form>
-
-    <!-- Listagem de Imóveis -->
-    <h2>Lista de Imóveis</h2>
+    <div class="location">
+        <form action="{{ route('imoveis.index') }}" method="GET">
+            <input type="text" id="query" name="query" placeholder="Digite sua pesquisa por Nome, Cidade ou Endereço...">
+            <button type="submit">Pesquisar</button>
+        </form>
+    </div>
+    
     @if (session('msg'))
         <p style="color: green;">{{ session('msg') }}</p>
     @endif

@@ -707,3 +707,43 @@ nav.navbar-white .fa-bars{
         margin: 40px 0;
     }
 }
+
+.location {
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    margin: 20px auto; /* Margem superior e inferior */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.location form {
+    display: flex;
+    width: 100%;
+    max-width: 800px;
+}
+
+.location label {
+    display: none; /* Ocultar o label para um layout mais limpo */
+}
+
+.location input[type="text"] {
+    flex: 1; /* Faz o input ocupar o máximo de espaço */
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+}
+
+.location form button{
+    background: #ff5361;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    border: 0;
+    outline: none;
+    cursor: pointer;
+    color: white;
+}
