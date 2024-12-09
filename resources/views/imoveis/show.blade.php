@@ -7,7 +7,7 @@
     <title>Detalhes</title>
     <script>
         function sendWhats(numero, mensagem) {
-            numero = "555496851311"
+            numero = "555492619884"
             mensagem = encodeURIComponent(`Bom Dia, Tudo Bem?\n Vi seu imóvel anunciado no AlugApp, ainda está disponível?`)
     
             window.location.replace(`https://api.whatsapp.com/send?phone=${numero}&text=${mensagem}`)
