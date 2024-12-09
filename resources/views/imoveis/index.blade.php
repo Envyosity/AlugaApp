@@ -218,7 +218,6 @@
                         <a href="house.html"><img src="images/image-s1.png" alt="Imagem do Imóvel"></a>
                     </div>
                     <div class="house-info">
-                        <p><strong>Condomínio:</strong> XPTO</p>
                         <h3>{{ $imovel->des_nome }}</h3>
                         <p>{{ $imovel->des_informacoes }}</p>
                         <div class="house-price">
