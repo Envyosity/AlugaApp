@@ -5,41 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * Classe Imoveis que representa o modelo da tabela `imoveis` no banco de dados.
- */
 class Imoveis extends Model
 {
     use HasFactory;
 
-    /**
-     * Nome da tabela associada a este modelo.
-     */
-    protected $table = 'imoveis'; // Nome da tabela no banco de dados
+    // Nome da tabela no banco de dados
+    protected $table = 'imoveis';
 
-    /**
-     * Chave primária personalizada.
-     */
-    protected $primaryKey = 'idt_imovel'; // Nome da chave primária
+    // Nome da chave primária
+    protected $primaryKey = 'idt_imovel';
 
-    /**
-     * Define se a chave primária é auto-incremental.
-     */
+    // Define se a chave primária é auto-incremental
     public $incrementing = true;
 
-    /**
-     * Tipo da chave primária.
-     */
+    // Tipo da chave primária
     protected $keyType = 'int';
 
-    /**
-     * Define se o modelo deve usar timestamps.
-     */
-    public $timestamps = true; // Ativa os campos created_at e updated_at
+    // Habilita os timestamps
+    public $timestamps = true;
 
-    /**
-     * Define os campos que podem ser preenchidos em massa.
-     */
+    // Campos que podem ser preenchidos em massa
     protected $fillable = [
         'des_nome',
         'num_valor',
@@ -49,11 +34,10 @@ class Imoveis extends Model
         'des_bairro',
         'des_cidade',
         'des_estado',
+        'des_pais',
     ];
 
-    /**
-     * Define uma fábrica personalizada, se necessário.
-     */
+    // Fábrica personalizada (se necessário)
     protected static function newFactory()
     {
         return \Database\Factories\ImoveisFactory::new();

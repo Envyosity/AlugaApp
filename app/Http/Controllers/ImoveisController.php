@@ -14,27 +14,27 @@ class ImoveisController extends Controller
     {
         $query = $request->input('query');
 
-        // Se houver uma palavra-chave de pesquisa, realiza a busca
+        // Verifica se há algum texto no campo de pesquisa
         if ($query) {
-            $imoveis = Imoveis::where('des_nome', 'LIKE', "%{$query}%")
-                ->orWhere('des_cidade', 'LIKE', "%{$query}%")
-                ->orWhere('des_endereco', 'LIKE', "%{$query}%")
+            $imoveis = Imoveis::where('des_nome', 'ILIKE', "%{$query}%")
+                ->orWhere('des_cidade', 'ILIKE', "%{$query}%")
+                ->orWhere('des_endereco', 'ILIKE', "%{$query}%")
                 ->get();
         } else {
-            // Caso contrário, recupera todos os imóveis
+            // Se não houver pesquisa, exibe todos os imóveis
             $imoveis = Imoveis::all();
         }
 
-        // Retorna a view index passando a variável $imoveis e a palavra-chave
         return view('imoveis.index', compact('imoveis', 'query'));
     }
+
 
     /**
      * Exibe o formulário para criar um novo imóvel.
      */
     public function create()
     {
-        return view('create_imovel');
+        return view('imoveis.create');
     }
 
     /**
@@ -42,20 +42,20 @@ class ImoveisController extends Controller
      */
     public function store(Request $request)
     {
-        $imovel = new Imoveis();
+        $validated = $request->validate([
+            'des_nome' => 'required|string|max:255',
+            'num_valor' => 'required|numeric',
+            'num_tamanho' => 'required|numeric',
+            'des_informacoes' => 'nullable|string',
+            'des_endereco' => 'required|string',
+            'des_bairro' => 'required|string',
+            'des_cidade' => 'required|string',
+            'des_estado' => 'required|string',
+            'des_pais' => 'required|string',
+        ]);
 
-        // Mapeando os campos do formulário para as colunas do banco de dados
-        $imovel->des_nome = $request->input('nome');
-        $imovel->num_valor = $request->input('valor');
-        $imovel->num_tamanho = $request->input('tamanho');
-        $imovel->des_informacoes = $request->input('informacoes');
-        $imovel->des_endereco = $request->input('endereco');
-        $imovel->des_bairro = $request->input('bairro');
-        $imovel->des_cidade = $request->input('cidade');
-        $imovel->des_estado = $request->input('estado');
-        $imovel->des_pais = $request->input('pais'); // Certifique-se de capturar este campo
-
-        $imovel->save();
+        // Criação do imóvel com os dados validados
+        Imoveis::create($validated);
 
         return redirect()->route('imoveis.index')->with('msg', 'Imóvel cadastrado com sucesso!');
     }
@@ -65,20 +65,12 @@ class ImoveisController extends Controller
      */
     public function show(string $id)
     {
-        if (!is_numeric($id)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'ID inválido fornecido.',
-            ]);
-        }
-
+        // Verifica se o ID fornecido é válido
         $imovel = Imoveis::find($id);
-
         if ($imovel) {
-            return view('imoveis.show')->with('imovel', $imovel);
-        } else {
-            return view('imoveis.show')->with('msg', 'Imóvel não encontrado!');
+            return view('imoveis.show', compact('imovel'));
         }
+        return redirect()->route('imoveis.index')->with('msg', 'Imóvel não encontrado!');
     }
 
     /**
@@ -86,17 +78,12 @@ class ImoveisController extends Controller
      */
     public function edit(string $id)
     {
-        if (!is_numeric($id)) {
-            return redirect()->route('imoveis.index')->with('msg', 'ID inválido fornecido.');
-        }
-
+        // Verifica se o imóvel existe
         $imovel = Imoveis::find($id);
-
         if ($imovel) {
-            return view('imoveis.edit')->with('imovel', $imovel);
-        } else {
-            return redirect()->route('imoveis.index')->with('msg', 'Imóvel não encontrado!');
+            return view('imoveis.edit', compact('imovel'));
         }
+        return redirect()->route('imoveis.index')->with('msg', 'Imóvel não encontrado!');
     }
 
     /**
@@ -104,30 +91,27 @@ class ImoveisController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if (!is_numeric($id)) {
-            return redirect()->route('imoveis.index')->with('msg', 'ID inválido fornecido.');
-        }
-
+        // Verifica se o imóvel existe
         $imovel = Imoveis::find($id);
+        if ($imovel) {
+            $validated = $request->validate([
+                'des_nome' => 'required|string|max:255',
+                'num_valor' => 'required|numeric',
+                'num_tamanho' => 'required|numeric',
+                'des_informacoes' => 'nullable|string',
+                'des_endereco' => 'required|string',
+                'des_bairro' => 'required|string',
+                'des_cidade' => 'required|string',
+                'des_estado' => 'required|string',
+                'des_pais' => 'required|string',
+            ]);
 
-        if (!$imovel) {
-            return redirect()->route('imoveis.index')->with('msg', 'Imóvel não encontrado!');
+            // Atualiza os dados do imóvel
+            $imovel->update($validated);
+
+            return redirect()->route('imoveis.index')->with('msg', 'Imóvel atualizado com sucesso!');
         }
-
-        // Atualizando os campos
-        $imovel->des_nome = $request->input('nome');
-        $imovel->num_valor = $request->input('valor');
-        $imovel->num_tamanho = $request->input('tamanho');
-        $imovel->des_informacoes = $request->input('informacoes');
-        $imovel->des_endereco = $request->input('endereco');
-        $imovel->des_bairro = $request->input('bairro');
-        $imovel->des_cidade = $request->input('cidade');
-        $imovel->des_estado = $request->input('estado');
-        $imovel->des_pais = $request->input('pais'); // Atualiza o campo des_pais
-
-        $imovel->save();
-
-        return redirect()->route('imoveis.index')->with('msg', 'Imóvel atualizado com sucesso!');
+        return redirect()->route('imoveis.index')->with('msg', 'Imóvel não encontrado!');
     }
 
     /**
@@ -135,18 +119,31 @@ class ImoveisController extends Controller
      */
     public function destroy(string $id)
     {
-        if (!is_numeric($id)) {
-            return redirect()->route('imoveis.index')->with('msg', 'ID inválido fornecido.');
-        }
-
+        // Verifica se o imóvel existe
         $imovel = Imoveis::find($id);
-
         if ($imovel) {
+            // Exclui o imóvel
             $imovel->delete();
-
             return redirect()->route('imoveis.index')->with('msg', 'Imóvel excluído com sucesso!');
-        } else {
-            return redirect()->route('imoveis.index')->with('msg', 'Imóvel não encontrado!');
         }
+        return redirect()->route('imoveis.index')->with('msg', 'Imóvel não encontrado!');
     }
+
+    /**
+     * Pesquisa imóveis com base em uma palavra-chave.
+     */
+    public function search(Request $request)
+    {
+        // Teste com um valor fixo para garantir que a consulta funciona
+        $query = 'Casa';  // Teste com qualquer valor fixo
+
+        // Realiza a busca
+        $imoveis = Imoveis::where('des_nome', 'ILIKE', "%{$query}%")
+            ->orWhere('des_cidade', 'ILIKE', "%{$query}%")
+            ->orWhere('des_endereco', 'ILIKE', "%{$query}%")
+            ->get();
+
+        return view('imoveis.index', compact('imoveis', 'query'));
+    }
+
 }
