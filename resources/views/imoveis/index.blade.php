@@ -51,6 +51,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" onclick="return confirm('Tem certeza que deseja excluir {{ $imovel->des_nome }}?')" class="text-red-500 hover:text-red-700">Excluir</button>
+                            </form>
                         </div>
                     </div>
                 </div>
