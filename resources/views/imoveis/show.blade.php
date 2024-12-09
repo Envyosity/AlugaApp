@@ -5,6 +5,14 @@
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>
     <link rel="stylesheet" href="{{ asset('style.css') }}">
     <title>Detalhes</title>
+    <script>
+        function sendWhats(numero, mensagem) {
+            numero = "555496851311"
+            mensagem = encodeURIComponent(`Bom Dia, Tudo Bem?\n Vi seu imóvel anunciado no AlugApp, ainda está disponível?`)
+    
+            window.location.replace(`https://api.whatsapp.com/send?phone=${numero}&text=${mensagem}`)
+        }
+    </script>
 </head>
 <body>
 <div class="house-details">
@@ -24,7 +32,7 @@
             <h4>R$ {{ old('num_valor', $imovel->num_valor) }} / Noite</h4>
         </div>
         <hr class="line">
-        <form class="check-form">
+        <div class="check-form">
             <div>
                 <label>Check-in</label>
                 <input type="text" placeholder="Data de entrada">
@@ -37,8 +45,8 @@
                 <label>Hóspede</label>
                 <input type="text" placeholder="2 hóspedes">
             </div>
-            <button type="submit">Reservar</button>
-        </form>
+            <button onclick="sendWhats(1,1)">Reservar</button>
+        </div>
 
         <h2>Descrição</h2><br>
         <p class="home-desc">Aconchegante imóvel em {{ old('des_cidade', $imovel->des_cidade) }}-{{ old('des_estado', $imovel->des_estado) }}. 
