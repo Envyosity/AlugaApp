@@ -22,15 +22,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
 require __DIR__.'/auth.php';
 
-
 Route::resource("/imoveis", ImoveisController::class);
+
 Route::get('/imoveis/search', [ImoveisController::class, 'search'])->name('imoveis.search');
 
-
 Route::get('/imoveis/create', [ImoveisController::class, 'create'])->name('imoveis.create');
-
 
 Route::resource('imoveis', ImoveisController::class);

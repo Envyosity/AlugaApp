@@ -65,12 +65,12 @@ class ImoveisController extends Controller
      */
     public function show(string $id)
     {
-        if (!is_numeric($id)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'ID inválido fornecido.',
-            ]);
-        }
+        // if (!is_numeric($id)) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'ID inválido fornecido.',
+        //     ]);
+        // }
 
         $imovel = Imoveis::find($id);
 
@@ -80,7 +80,7 @@ class ImoveisController extends Controller
             return view('imoveis.show')->with('msg', 'Imóvel não encontrado!');
         }
     }
-
+ 
     /**
      * Exibe o formulário de edição de um imóvel específico.
      */
